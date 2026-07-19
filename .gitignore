@@ -1,0 +1,74 @@
+# Local AI-assistant settings
+.claude/
+
+# Operating-system metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.directory
+Thumbs.db
+Desktop.ini
+
+# Editor and IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local environment files and secrets
+.env
+.env.*
+!.env.example
+*.htpasswd
+.htpasswd
+
+# Logs, caches, and temporary files
+*.log
+*.tmp
+*.temp
+.cache/
+.phpunit.cache/
+.phpunit.result.cache
+.php-cs-fixer.cache
+
+# Local dependency installs
+vendor/
+
+# Office temporary files
+~$*
+
+
+# Server-local music library directories
+/abc/
+/banjo/
+/example/
+/guitar/
+/other/
+/songs/
+/uke/
+/whistle/
+
+# Music, document, image, archive, and installer assets
+*.[Aa][Bb][Cc]
+*.[Bb][Mm][Pp]
+*.[Dd][Oo][Cc]
+*.[Dd][Oo][Cc][Xx]
+*.[Ee][Xx][Ee]
+*.[Gg][Ii][Ff]
+*.[Jj][Pp][Ee][Gg]
+*.[Jj][Pp][Gg]
+*.[Mm][Ii][Dd]
+*.[Mm][Ii][Dd][Ii]
+*.[Mm][Pp]3
+*.[Pp][Dd][Ff]
+*.[Pp][Nn][Gg]
+*.[Ss][Ff]2
+*.[Tt][Aa][Bb]
+*.[Tt][Ee][Ff]
+*.[Tt][Xx][Tt]
+*.[Zz][Ii][Pp]
+
+# Legacy local executable without a file extension
+/pkexec-old
