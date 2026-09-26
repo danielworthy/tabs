@@ -138,8 +138,23 @@ function parentPath(string $path): string
     return $parent === '.' ? '' : $parent;
 }
 
+function hasHiddenPathSegment(string $path): bool
+{
+    foreach (explode('/', $path) as $part) {
+        if ($part !== '' && $part[0] === '.') {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function resolveWithinRoot(string $root, string $relativePath): ?string
 {
+    if (hasHiddenPathSegment($relativePath)) {
+        return null;
+    }
+
     $fullPath = $root . ($relativePath === '' ? '' : '/' . $relativePath);
     $realPath = realpath($fullPath);
 
@@ -148,6 +163,10 @@ function resolveWithinRoot(string $root, string $relativePath): ?string
     }
 
     if ($realPath !== $root && strpos($realPath, $root . DIRECTORY_SEPARATOR) !== 0) {
+        return null;
+    }
+
+    if (hasHiddenPathSegment(substr($realPath, strlen($root)))) {
         return null;
     }
 
@@ -169,29 +188,33 @@ function listDirectoryItems(string $root, string $currentDir, string $currentPat
             continue;
         }
 
-        $fullPath = $currentPath . DIRECTORY_SEPARATOR . $entry;
         $relativePath = ltrim($currentDir . '/' . $entry, '/');
+        $resolvedPath = resolveWithinRoot($root, $relativePath);
 
-        if (is_dir($fullPath)) {
+        if ($resolvedPath === null) {
+            continue;
+        }
+
+        if (is_dir($resolvedPath)) {
             $directories[] = [
                 'name' => $entry,
                 'path' => $relativePath,
-                'modified' => @filemtime($fullPath) ?: 0,
+                'modified' => @filemtime($resolvedPath) ?: 0,
             ];
             continue;
         }
 
-        if (!is_file($fullPath)) {
+        if (!is_file($resolvedPath)) {
             continue;
         }
 
-        $size = @filesize($fullPath);
+        $size = @filesize($resolvedPath);
         $files[] = [
             'name' => $entry,
             'path' => $relativePath,
             'size' => $size === false ? 0 : $size,
             'size_known' => $size !== false,
-            'modified' => @filemtime($fullPath) ?: 0,
+            'modified' => @filemtime($resolvedPath) ?: 0,
             'ext' => strtolower(pathinfo($entry, PATHINFO_EXTENSION)),
             'type' => fileTypeLabel($entry),
         ];
